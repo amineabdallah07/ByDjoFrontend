@@ -29,9 +29,7 @@ import { Product, Category } from "../../core/models/interfaces";
         <div class="max-w-3xl animate-fade-up">
           <p
             class="text-primary-400 text-sm font-medium tracking-widest uppercase mb-4"
-          >
-            Nouvelle Collection Disponible
-          </p>
+          ></p>
           <h1
             class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-none mb-6"
           >
