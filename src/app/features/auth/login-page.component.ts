@@ -10,12 +10,15 @@ import { I18nService } from "../../core/services/i18n.service";
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="min-h-screen flex items-center justify-center px-4 pt-20" [dir]="i18n.isRTL() ? 'rtl' : 'ltr'">
+    <div
+      class="min-h-screen flex items-center justify-center px-4 pt-20"
+      [dir]="i18n.isRTL() ? 'rtl' : 'ltr'"
+    >
       <div class="w-full max-w-md">
         <!-- Logo -->
         <div class="text-center mb-8">
           <h1 class="text-3xl font-black tracking-[0.2em] text-dark-100 mb-2">
-            BY DJO
+            KHLAYEL STORE
           </h1>
           <p class="text-dark-400">{{ i18n.t().login.subtitle }}</p>
         </div>
@@ -28,9 +31,9 @@ import { I18nService } from "../../core/services/i18n.service";
                 {{ i18n.t().login.title }}
               </h2>
               <div class="mb-4">
-                <label class="block text-dark-400 text-sm mb-2"
-                  >{{ i18n.t().login.phone }}</label
-                >
+                <label class="block text-dark-400 text-sm mb-2">{{
+                  i18n.t().login.phone
+                }}</label>
                 <div class="flex">
                   <span
                     class="inline-flex items-center px-4 bg-dark-800 border border-dark-700 border-r-0 rounded-l-lg text-dark-300 text-sm"
@@ -136,7 +139,7 @@ import { I18nService } from "../../core/services/i18n.service";
         </div>
 
         <p class="text-center text-dark-500 text-sm mt-6">
-          BY DJO &copy; 2024
+          KHLAYEL STORE &copy; 2024
         </p>
       </div>
     </div>
@@ -182,7 +185,9 @@ export class LoginPageComponent implements OnInit {
       },
       error: (err) => {
         this.sending.set(false);
-        this.errorMessage.set(err?.error?.message || this.i18n.t().common.error);
+        this.errorMessage.set(
+          err?.error?.message || this.i18n.t().common.error,
+        );
       },
     });
   }
@@ -196,9 +201,12 @@ export class LoginPageComponent implements OnInit {
       next: (response: any) => {
         this.verifying.set(false);
         if (response.success) {
-          const returnUrl = new URLSearchParams(window.location.search).get("returnUrl") || "";
+          const returnUrl =
+            new URLSearchParams(window.location.search).get("returnUrl") || "";
           if (returnUrl && returnUrl !== "/account") {
-            this.router.navigate(["/account"], { queryParams: { next: returnUrl } });
+            this.router.navigate(["/account"], {
+              queryParams: { next: returnUrl },
+            });
           } else {
             this.router.navigate(["/account"]);
           }
@@ -208,7 +216,9 @@ export class LoginPageComponent implements OnInit {
       },
       error: (err) => {
         this.verifying.set(false);
-        this.errorMessage.set(err?.error?.message || this.i18n.t().common.error);
+        this.errorMessage.set(
+          err?.error?.message || this.i18n.t().common.error,
+        );
       },
     });
   }

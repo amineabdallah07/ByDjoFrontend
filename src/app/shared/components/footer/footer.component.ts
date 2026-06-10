@@ -15,7 +15,7 @@ import { I18nService } from "../../../core/services/i18n.service";
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <h3 class="text-2xl font-black tracking-[0.2em] text-dark-100 mb-4">
-              BY DJO
+              KHLAYEL STORE
             </h3>
             <p class="text-dark-400 text-sm leading-relaxed mb-6">
               {{ i18n.t().footer.tagline }}
@@ -161,7 +161,7 @@ import { I18nService } from "../../../core/services/i18n.service";
           class="page-container py-6 flex flex-col md:flex-row items-center justify-between gap-4"
         >
           <p class="text-dark-500 text-sm">
-            &copy; 2024 BY DJO. {{ i18n.t().footer.rights }}
+            &copy; 2024 KHLAYEL STORE. {{ i18n.t().footer.rights }}
           </p>
           <p class="text-dark-500 text-xs">{{ i18n.t().footer.madeIn }}</p>
         </div>
