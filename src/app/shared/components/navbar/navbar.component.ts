@@ -77,7 +77,7 @@ import { LangSwitcherComponent } from "../lang-switcher/lang-switcher.component"
                 [routerLink]="link.path"
                 [queryParams]="link.queryParams || {}"
                 routerLinkActive="text-primary-400"
-                class="text-sm font-medium text-dark-300 hover:text-primary-400 transition-colors uppercase tracking-wider"
+                class="text-sm font-medium text-blanc-300 hover:text-primary-400 transition-colors uppercase tracking-wider"
               >
                 {{ link.label }}
               </a>
