@@ -38,7 +38,7 @@ import { Product, Category } from "../../core/models/interfaces";
 
           <div class="flex flex-wrap gap-4">
             <a routerLink="/shop" class="btn-gold text-lg">
-              {{ i18n.t().home.shop }}
+              {{ i18n.t().home.shopNow }}
               <svg
                 class="w-5 h-5 ml-2"
                 fill="none"
