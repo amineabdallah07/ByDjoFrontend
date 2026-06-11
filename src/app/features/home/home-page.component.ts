@@ -35,12 +35,6 @@ import { Product, Category } from "../../core/models/interfaces";
             PREMIUM<br />
             <span class="text-gradient">STREETWEAR</span>
           </h1>
-          <p
-            class="text-dark-300 text-lg md:text-xl max-w-xl mb-8 leading-relaxed"
-          >
-            Découvrez notre collection exclusive de vêtements masculins. Style
-            urbain, qualité premium.
-          </p>
 
           <div class="flex flex-wrap gap-4">
             <a routerLink="/shop" class="btn-gold text-lg">
