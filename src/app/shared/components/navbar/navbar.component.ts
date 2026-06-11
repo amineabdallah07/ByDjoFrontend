@@ -91,7 +91,7 @@ import { LangSwitcherComponent } from "../lang-switcher/lang-switcher.component"
 
             <!-- Search -->
             <button
-              class="text-dark-300 hover:text-dark-100 transition-colors p-2"
+              class="text-blanc-300 hover:text-blanc-100 transition-colors p-2"
               (click)="toggleSearch()"
             >
               <svg
@@ -112,7 +112,7 @@ import { LangSwitcherComponent } from "../lang-switcher/lang-switcher.component"
             <!-- Wishlist -->
             <a
               routerLink="/account/wishlist"
-              class="hidden md:block text-dark-300 hover:text-dark-100 transition-colors p-2"
+              class="hidden md:block text-blanc-300 hover:text-blanc-100 transition-colors p-2"
             >
               <svg
                 class="w-5 h-5"
@@ -132,7 +132,7 @@ import { LangSwitcherComponent } from "../lang-switcher/lang-switcher.component"
             <!-- Cart -->
             <a
               routerLink="/cart"
-              class="relative text-dark-300 hover:text-dark-100 transition-colors p-2"
+              class="relative text-blanc-300 hover:text-blanc-100 transition-colors p-2"
             >
               <svg
                 class="w-5 h-5"
@@ -163,7 +163,7 @@ import { LangSwitcherComponent } from "../lang-switcher/lang-switcher.component"
                 (click)="toggleUserMenu($event)"
               >
                 <button
-                  class="text-dark-300 hover:text-dark-100 transition-colors p-2"
+                  class="text-blanc-300 hover:text-blanc-100 transition-colors p-2"
                 >
                   <svg
                     class="w-5 h-5"
