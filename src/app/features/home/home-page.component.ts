@@ -23,7 +23,6 @@ import { Product, Category } from "../../core/models/interfaces";
         style="background-image: url('by.jpg');"
       ></div>
       <!-- Dark overlay -->
-      <div class="absolute inset-0 bg-dark-950/60"></div>
 
       <div class="page-container relative z-10 w-full">
         <div class="max-w-3xl animate-fade-up">
