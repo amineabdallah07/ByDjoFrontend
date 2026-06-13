@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, inject, AfterViewInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthService } from "../../core/services/auth.service";
 import { FirebaseAuthService } from "../../core/services/firebase-auth.service";
 import { I18nService } from "../../core/services/i18n.service";
@@ -9,7 +9,7 @@ import { I18nService } from "../../core/services/i18n.service";
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   template: `
     <div
       class="min-h-screen flex items-center justify-center px-4 pt-20"
