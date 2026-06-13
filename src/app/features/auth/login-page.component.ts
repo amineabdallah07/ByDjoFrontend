@@ -1,9 +1,8 @@
-import { Component, OnInit, signal, inject, AfterViewInit } from "@angular/core";
+import { Component, OnInit, signal, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService } from "../../core/services/auth.service";
-import { FirebaseAuthService } from "../../core/services/firebase-auth.service";
 import { I18nService } from "../../core/services/i18n.service";
 
 @Component({
@@ -138,9 +137,6 @@ import { I18nService } from "../../core/services/i18n.service";
           }
         </div>
 
-        <!-- Recaptcha container (invisible) -->
-        <div id="recaptcha-container"></div>
-
         <p class="text-center text-dark-500 text-sm mt-6">
           KHLAYEL STORE &copy; 2024
         </p>
@@ -148,7 +144,7 @@ import { I18nService } from "../../core/services/i18n.service";
     </div>
   `,
 })
-export class LoginPageComponent implements OnInit, AfterViewInit {
+export class LoginPageComponent implements OnInit {
   i18n = inject(I18nService);
 
   phone = "";
@@ -159,10 +155,10 @@ export class LoginPageComponent implements OnInit, AfterViewInit {
   resendCooldown = signal(0);
   errorMessage = signal("");
   private cooldownInterval: any;
+  private formattedPhone = "";
 
   constructor(
     private authService: AuthService,
-    private firebaseAuth: FirebaseAuthService,
     private router: Router,
   ) {}
 
@@ -174,67 +170,58 @@ export class LoginPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => this.firebaseAuth.initRecaptcha("recaptcha-container"), 500);
-  }
-
-  async sendOtp(): Promise<void> {
+  sendOtp(): void {
     if (!this.phone || this.phone.length < 8) return;
     this.sending.set(true);
     this.errorMessage.set("");
-    const formattedPhone = "+216" + this.phone.replace(/\s/g, "");
+    this.formattedPhone = "+216" + this.phone.replace(/\s/g, "");
 
-    try {
-      await this.firebaseAuth.sendOtp(formattedPhone);
-      this.sending.set(false);
-      this.step.set(2);
-      this.startResendCooldown();
-    } catch (err: any) {
-      this.sending.set(false);
-      this.errorMessage.set(err?.message || this.i18n.t().common.error);
-    }
+    this.authService.sendOtp(this.formattedPhone).subscribe({
+      next: () => {
+        this.sending.set(false);
+        this.step.set(2);
+        this.startResendCooldown();
+      },
+      error: (err: any) => {
+        this.sending.set(false);
+        this.errorMessage.set(err?.error?.message || err?.message || this.i18n.t().common.error);
+      },
+    });
   }
 
-  async verifyOtp(): Promise<void> {
+  verifyOtp(): void {
     if (this.otpCode().length < 6) return;
     this.verifying.set(true);
     this.errorMessage.set("");
 
-    try {
-      const idToken = await this.firebaseAuth.verifyOtp(this.otpCode());
-      this.authService.firebaseLogin(idToken).subscribe({
-        next: (response: any) => {
-          this.verifying.set(false);
-          if (response.success) {
-            const returnUrl =
-              new URLSearchParams(window.location.search).get("returnUrl") || "";
-            if (returnUrl && returnUrl !== "/account") {
-              this.router.navigate(["/account"], {
-                queryParams: { next: returnUrl },
-              });
-            } else {
-              this.router.navigate(["/account"]);
-            }
+    this.authService.verifyOtp(this.formattedPhone, this.otpCode()).subscribe({
+      next: (response: any) => {
+        this.verifying.set(false);
+        if (response.success) {
+          const returnUrl =
+            new URLSearchParams(window.location.search).get("returnUrl") || "";
+          if (returnUrl && returnUrl !== "/account") {
+            this.router.navigate(["/account"], {
+              queryParams: { next: returnUrl },
+            });
           } else {
-            this.errorMessage.set(response.message || this.i18n.t().common.error);
+            this.router.navigate(["/account"]);
           }
-        },
-        error: (err) => {
-          this.verifying.set(false);
-          this.errorMessage.set(
-            err?.error?.message || this.i18n.t().common.error,
-          );
-        },
-      });
-    } catch (err: any) {
-      this.verifying.set(false);
-      this.errorMessage.set(err?.message || this.i18n.t().common.error);
-    }
+        } else {
+          this.errorMessage.set(response.message || this.i18n.t().common.error);
+        }
+      },
+      error: (err: any) => {
+        this.verifying.set(false);
+        this.errorMessage.set(
+          err?.error?.message || err?.message || this.i18n.t().common.error,
+        );
+      },
+    });
   }
 
   resendOtp(): void {
     if (this.resendCooldown() > 0) return;
-    this.firebaseAuth.reset();
     this.otpCode.set("");
     this.step.set(1);
   }
