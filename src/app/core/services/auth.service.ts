@@ -49,6 +49,16 @@ export class AuthService {
     return this.api.post("auth/otp/send", request);
   }
 
+  firebaseLogin(idToken: string): Observable<any> {
+    return this.api.post("auth/firebase", { idToken }).pipe(
+      tap((response: any) => {
+        if (response.success && response.data) {
+          this.handleAuth(response.data);
+        }
+      }),
+    );
+  }
+
   verifyOtp(phone: string, code: string): Observable<any> {
     const request: OtpVerify = { phone, code };
     return this.api.post("auth/otp/verify", request).pipe(
