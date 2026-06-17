@@ -193,17 +193,17 @@ import {
                       </div>
                     </td>
                     <td class="p-4 text-dark-300 text-sm">
-                      {{ product.category?.name || "-" }}
+                      {{ product.category.name || "-" }}
                     </td>
                     <td class="p-4">
                       <div>
                         <span class="text-primary-400 font-semibold text-sm"
-                          >{{ product.price?.toFixed(3) }} TND</span
+                          >{{ product.price.toFixed(3) }} TND</span
                         >
                         @if (product.compareAtPrice) {
                           <span
                             class="text-dark-500 text-xs line-through ml-2"
-                            >{{ product.compareAtPrice?.toFixed(3) }}</span
+                            >{{ product.compareAtPrice.toFixed(3) }}</span
                           >
                         }
                       </div>
@@ -239,6 +239,12 @@ import {
                           <span
                             class="text-xs bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded"
                             >Flash</span
+                          >
+                        }
+                        @if (product.isQrProduct) {
+                          <span
+                            class="text-xs bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded"
+                            >QR</span
                           >
                         }
                       </div>
@@ -838,6 +844,7 @@ export class AdminProductsComponent implements OnInit {
     { key: "isNew", icon: "🆕", label: "Nouveau" },
     { key: "bestseller", icon: "🔥", label: "Best Seller" },
     { key: "flashSale", icon: "⚡", label: "Flash Sale" },
+    { key: "isQrProduct", icon: "📱", label: "QR T-shirt" },
   ];
 
   form: any = this.emptyForm();
@@ -868,6 +875,7 @@ export class AdminProductsComponent implements OnInit {
       isNew: false,
       bestseller: false,
       flashSale: false,
+      isQrProduct: false,
     };
   }
 
@@ -974,6 +982,7 @@ export class AdminProductsComponent implements OnInit {
       isNew: product.isNew,
       bestseller: product.bestseller,
       flashSale: product.flashSale,
+      isQrProduct: product.isQrProduct,
     };
     this.clearFiles();
     // Load existing size variants
@@ -1050,6 +1059,7 @@ export class AdminProductsComponent implements OnInit {
       isNew: this.form.isNew,
       bestseller: this.form.bestseller,
       flashSale: this.form.flashSale,
+      isQrProduct: this.form.isQrProduct,
       variants:
         this.sizeStocks.length > 0
           ? this.sizeStocks.map((s) => ({

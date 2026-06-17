@@ -1,16 +1,19 @@
 import { Component, OnInit, signal, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, ActivatedRoute } from "@angular/router";
+import { FormsModule } from "@angular/forms";
 import { ProductService } from "../../core/services/product.service";
 import { CartService } from "../../core/services/cart.service";
 import { WishlistService } from "../../core/services/wishlist.service";
 import { CloudinaryService } from "../../core/services/cloudinary.service";
+import { QrService } from "../../core/services/qr.service";
+import { StorageService } from "../../core/services/storage.service";
 import { Product } from "../../core/models/interfaces";
 
 @Component({
   selector: "app-product-detail",
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   template: `
     <div class="pt-24 pb-20">
       <div class="page-container">
@@ -254,12 +257,59 @@ import { Product } from "../../core/models/interfaces";
               }
 
               <div class="mt-10 pt-8 border-t border-dark-800 space-y-4">
-                @if (product()!.material) {
-                  <div class="flex justify-between">
-                    <span class="text-dark-500">Matière</span>
-                    <span class="text-dark-200">{{ product()!.material }}</span>
-                  </div>
-                }
+              @if (product()!.isQrProduct) {
+                <div class="mt-6 pt-6 border-t border-dark-800">
+                  <h3 class="text-lg font-bold text-dark-100 mb-4">Contenu QR</h3>
+                  @if (qrUploaded()) {
+                    <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+                      <p class="text-green-400 text-sm font-medium">Contenu enregistré</p>
+                      <p class="text-dark-400 text-xs mt-1 break-all">{{ qrContentPreview() }}</p>
+                      <button (click)="resetQrContent()" class="text-dark-400 hover:text-dark-200 text-xs mt-2 underline">
+                        Modifier
+                      </button>
+                    </div>
+                  } @else {
+                    <div class="flex gap-3 mb-4">
+                      <button (click)="qrType.set('PHOTO')"
+                        [class]="qrType() === 'PHOTO' ? 'btn-primary text-sm' : 'btn-secondary text-sm'"
+                      >
+                        📷 Photo
+                      </button>
+                      <button (click)="qrType.set('LINK')"
+                        [class]="qrType() === 'LINK' ? 'btn-primary text-sm' : 'btn-secondary text-sm'"
+                      >
+                        🔗 Lien URL
+                      </button>
+                    </div>
+                    @if (qrType() === 'PHOTO') {
+                      <div class="border-2 border-dashed border-dark-700 rounded-xl p-6 text-center hover:border-primary-500/50 cursor-pointer"
+                        (click)="qrFileInput.click()">
+                        <input #qrFileInput type="file" accept="image/*" class="hidden"
+                          (change)="onQrPhotoSelected($event)" />
+                        <p class="text-dark-400 text-sm">Cliquer pour uploader une photo</p>
+                        @if (qrUploading()) {
+                          <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mt-2"></div>
+                        }
+                      </div>
+                    } @else {
+                      <input type="url" [(ngModel)]="qrLinkUrl"
+                        placeholder="https://..."
+                        class="w-full bg-dark-800 border border-dark-700 rounded-xl px-4 py-2.5 text-dark-100 focus:border-primary-500 focus:outline-none" />
+                      <button (click)="saveQrLink()" [disabled]="!qrLinkUrl()"
+                        class="btn-primary text-sm mt-2 disabled:opacity-40">
+                        Enregistrer le lien
+                      </button>
+                    }
+                  }
+                </div>
+              }
+
+              @if (product()!.material) {
+                <div class="flex justify-between">
+                  <span class="text-dark-500">Matière</span>
+                  <span class="text-dark-200">{{ product()!.material }}</span>
+                </div>
+              }
                 <div class="flex justify-between">
                   <span class="text-dark-500">Catégorie</span>
                   <span class="text-dark-200">{{ categoryName }}</span>
@@ -296,6 +346,12 @@ export class ProductDetailPageComponent implements OnInit {
   inWishlist = signal(false);
   wishlistMessage = signal("");
 
+  qrType = signal<string>("PHOTO");
+  qrLinkUrl = signal("");
+  qrUploaded = signal(false);
+  qrContentPreview = signal("");
+  qrUploading = signal(false);
+
   get categoryName(): string {
     const p = this.product();
     return p && p.category ? p.category.name : "";
@@ -307,6 +363,8 @@ export class ProductDetailPageComponent implements OnInit {
     private cartService: CartService,
     private wishlistService: WishlistService,
     private cloudinary: CloudinaryService,
+    private qrService: QrService,
+    private storageService: StorageService,
   ) {}
 
   ngOnInit(): void {
@@ -399,6 +457,50 @@ export class ProductDetailPageComponent implements OnInit {
   updateQuantity(delta: number): void {
     const q = this.quantity() + delta;
     if (q >= 1 && q <= this.selectedVariantStock()) this.quantity.set(q);
+  }
+
+  onQrPhotoSelected(event: any): void {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    this.qrUploading.set(true);
+    this.qrService.uploadPhoto(file).subscribe({
+      next: (res) => {
+        this.qrUploading.set(false);
+        if (res.success && res.data) {
+          const url = res.data.url;
+          this.qrContentPreview.set(url);
+          this.qrUploaded.set(true);
+          this.saveQrData(url);
+        }
+      },
+      error: () => this.qrUploading.set(false),
+    });
+  }
+
+  saveQrLink(): void {
+    if (!this.qrLinkUrl()) return;
+    this.qrContentPreview.set(this.qrLinkUrl());
+    this.qrUploaded.set(true);
+    this.saveQrData(this.qrLinkUrl());
+  }
+
+  resetQrContent(): void {
+    this.qrUploaded.set(false);
+    this.qrContentPreview.set("");
+    this.qrType.set("PHOTO");
+    this.qrLinkUrl.set("");
+    const pid = this.product()?.id;
+    if (pid) this.storageService.removeQrData(pid);
+  }
+
+  private saveQrData(content: string): void {
+    const pid = this.product()?.id;
+    if (!pid) return;
+    this.storageService.addQrData({
+      productId: pid,
+      qrType: this.qrType(),
+      content: content,
+    });
   }
 
   addToCart(): void {

@@ -192,7 +192,7 @@ import { I18nService } from "../../core/services/i18n.service";
                         {{ product.name }}
                       </h3>
                       <p class="text-dark-500 text-xs mb-2">
-                        {{ product.category?.name || "" }}
+                        {{ product.category.name || "" }}
                       </p>
                       <div class="flex items-center gap-2">
                         <span class="text-primary-400 font-bold">{{

@@ -45,6 +45,7 @@ export interface Product {
   isNew: boolean;
   bestseller: boolean;
   flashSale: boolean;
+  isQrProduct: boolean;
   discountPercentage: number;
   flashSaleEndsAt?: string;
   material?: string;
@@ -164,6 +165,14 @@ export interface OrderItem {
   unitPrice: number;
   totalPrice: number;
   productImage?: string;
+  qrCode?: string;
+  qrType?: string;
+}
+
+export interface QrData {
+  productId: number;
+  qrType: string;
+  content: string;
 }
 
 export interface CreateOrder {
@@ -177,6 +186,7 @@ export interface CreateOrder {
   couponCode?: string;
   notes?: string;
   sessionCartId?: string;
+  qrItems?: QrData[];
 }
 
 export enum OrderStatus {
@@ -193,6 +203,15 @@ export enum PaymentMethod {
   ONLINE_PAYMENT = 'ONLINE_PAYMENT'
 }
 
+// ===== T-shirt Models =====
+export interface Tshirt {
+  id: number;
+  code: string;
+  ownerId?: number;
+  scanCount: number;
+  createdAt: string;
+}
+
 // ===== Common Models =====
 export interface PagedResponse<T> {
   content: T[];
@@ -202,6 +221,37 @@ export interface PagedResponse<T> {
   totalPages: number;
   last: boolean;
   first: boolean;
+}
+
+export interface QrCode {
+  id: number;
+  code: string;
+  status: string;
+  createdAt: string;
+  assignedAt?: string;
+  customerName?: string;
+  productName?: string;
+  orderNumber?: string;
+  qrType?: string;
+  content?: string;
+}
+
+export interface QrCodeStats {
+  free: number;
+  assigned: number;
+}
+
+export interface QrOrderItem {
+  id: number;
+  orderItemId: number;
+  qrType: string;
+  content: string;
+  qrCode: string;
+  qrCodeId?: number;
+  orderNumber: string;
+  productName: string;
+  customerName: string;
+  createdAt: string;
 }
 
 export interface ApiResponse<T> {

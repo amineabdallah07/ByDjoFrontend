@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
+import { ScanPageComponent } from './features/scan/scan-page.component';
+import { QrScanPageComponent } from './features/qr/qr-scan-page.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +38,14 @@ export const routes: Routes = [
     path: 'admin',
     canActivate: [AdminGuard],
     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES)
+  },
+  {
+    path: 'scan/:code',
+    component: ScanPageComponent
+  },
+  {
+    path: 'qr/:code',
+    component: QrScanPageComponent
   },
   {
     path: '404',

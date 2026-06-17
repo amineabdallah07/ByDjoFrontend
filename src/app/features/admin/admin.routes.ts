@@ -7,6 +7,8 @@ import { AdminPromotionsComponent } from './promotions/admin-promotions.componen
 import { AdminSettingsComponent } from './settings/admin-settings.component';
 import { AdminLayoutComponent } from './admin-layout.component';
 
+import { AdminQrCodesComponent } from './qr-codes/admin-qr-codes.component';
+
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
@@ -17,6 +19,8 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'orders', component: AdminOrdersComponent },
       { path: 'customers', component: AdminCustomersComponent },
       { path: 'promotions', component: AdminPromotionsComponent },
+
+      { path: 'qr-codes', component: AdminQrCodesComponent },
       { path: 'settings', component: AdminSettingsComponent },
       { path: '**', redirectTo: '' }
     ]

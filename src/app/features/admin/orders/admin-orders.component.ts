@@ -151,10 +151,10 @@ import { Order, OrderStatus } from "../../../core/models/interfaces";
                       {{ order.shippingPhone }}
                     </td>
                     <td class="p-4 text-dark-400 text-xs">
-                      {{ order.items?.length || 0 }} article(s)
+                      {{ order.items.length || 0 }} article(s)
                     </td>
                     <td class="p-4 text-primary-400 font-semibold text-sm">
-                      {{ order.total?.toFixed(3) }} TND
+                      {{ order.total.toFixed(3) }} TND
                     </td>
                     <td class="p-4">
                       <select
@@ -427,7 +427,7 @@ import { Order, OrderStatus } from "../../../core/models/interfaces";
                     <div class="text-right shrink-0">
                       <p class="text-dark-100 text-sm">x{{ item.quantity }}</p>
                       <p class="text-primary-400 text-sm font-semibold">
-                        {{ item.totalPrice?.toFixed(3) }} TND
+                        {{ item.totalPrice.toFixed(3) }} TND
                       </p>
                     </div>
                   </div>
@@ -439,13 +439,13 @@ import { Order, OrderStatus } from "../../../core/models/interfaces";
             <div class="bg-dark-800/50 rounded-xl p-4 space-y-2">
               <div class="flex justify-between text-dark-300 text-sm">
                 <span>Sous-total</span>
-                <span>{{ selectedOrder.subtotal?.toFixed(3) }} TND</span>
+                <span>{{ selectedOrder.subtotal.toFixed(3) }} TND</span>
               </div>
               <div class="flex justify-between text-dark-300 text-sm">
                 <span>Livraison</span>
                 <span>{{
                   selectedOrder.shippingCost > 0
-                    ? selectedOrder.shippingCost?.toFixed(3) + " TND"
+                    ? selectedOrder.shippingCost.toFixed(3) + " TND"
                     : "Gratuite"
                 }}</span>
               </div>
@@ -456,14 +456,14 @@ import { Order, OrderStatus } from "../../../core/models/interfaces";
                       <code class="ml-1 px-1.5 py-0.5 bg-green-900/40 rounded text-xs font-mono">{{ selectedOrder.couponCode }}</code>
                     }
                   </span>
-                  <span>-{{ selectedOrder.discount?.toFixed(3) }} TND</span>
+                  <span>-{{ selectedOrder.discount.toFixed(3) }} TND</span>
                 </div>
               }
               <div
                 class="flex justify-between text-dark-100 font-bold text-base pt-2 border-t border-dark-700"
               >
                 <span>Total</span>
-                <span>{{ selectedOrder.total?.toFixed(3) }} TND</span>
+                <span>{{ selectedOrder.total.toFixed(3) }} TND</span>
               </div>
             </div>
 

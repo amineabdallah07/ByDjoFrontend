@@ -241,7 +241,7 @@ import { Product, Category } from "../../core/models/interfaces";
                   {{ product.name }}
                 </h3>
                 <p class="text-dark-500 text-xs mb-2">
-                  {{ product.category?.name }}
+                  {{ product.category.name }}
                 </p>
                 <div class="flex items-center gap-2">
                   <span class="text-primary-400 font-bold">{{

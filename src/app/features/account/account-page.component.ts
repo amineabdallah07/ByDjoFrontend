@@ -207,6 +207,17 @@ import { User } from "../../core/models/interfaces";
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a
+                  routerLink="/account/tshirts"
+                  class="glass rounded-xl p-4 hover:border-primary-500/30 transition-all group"
+                >
+                  <svg class="w-8 h-8 text-primary-500 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"/>
+                  </svg>
+                  <h3 class="text-dark-100 font-semibold">Mes T-shirts</h3>
+                  <p class="text-dark-500 text-sm">Voir les scans de vos T-shirts</p>
+                </a>
+
+                <a
                   routerLink="/account/orders"
                   class="glass rounded-xl p-4 hover:border-primary-500/30 transition-all group"
                 >

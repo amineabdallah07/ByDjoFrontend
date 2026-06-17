@@ -7,6 +7,7 @@ import { I18nService } from "../../core/services/i18n.service";
 import { OrderService } from "../../core/services/order.service";
 import { AuthService } from "../../core/services/auth.service";
 import { CloudinaryService } from "../../core/services/cloudinary.service";
+import { StorageService } from "../../core/services/storage.service";
 
 @Component({
   selector: "app-checkout",
@@ -432,6 +433,7 @@ export class CheckoutPageComponent implements OnInit {
   private cloudinary = inject(CloudinaryService);
   private orderSvc = inject(OrderService);
   private authService = inject(AuthService);
+  private storageService = inject(StorageService);
   private router = inject(Router);
 
   cartData = computed(() => this.cs.cart());
@@ -556,6 +558,8 @@ export class CheckoutPageComponent implements OnInit {
     this.validationError.set("");
     this.submitting.set(true);
 
+    const qrItems = this.storageService.getQrData();
+
     this.orderSvc
       .createOrder({
         shippingFullName: this.ord.fullName,
@@ -566,6 +570,7 @@ export class CheckoutPageComponent implements OnInit {
         shippingNotes: this.ord.notes,
         couponCode: this.cartData()?.couponCode || undefined,
         sessionCartId: localStorage.getItem("cart_session_id") || undefined,
+        qrItems: qrItems.length > 0 ? qrItems : undefined,
       })
       .subscribe({
         next: (r) => {
@@ -573,6 +578,7 @@ export class CheckoutPageComponent implements OnInit {
           this.orderSuccess.set(true);
           this.orderNumber.set(r.orderNumber);
           this.cs.loadCart();
+          this.storageService.clearQrData();
         },
         error: () => {
           this.submitting.set(false);
